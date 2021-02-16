@@ -1,0 +1,116 @@
+{
+	"scene": {
+
+		"objects": [
+
+			{
+				"name": "sphere0",
+				"shape": "Sphere",
+				"origin": [0.2, -1.0, -3.75],
+				"radius": 1.0,
+				"diffuse": 0.25,
+				"reflection": 0.5,
+				"shiny": 0.5,
+				"k": 9,
+				"color": [200, 0, 0]
+			},
+
+			{
+				"name": "sphere1",
+				"shape": "Sphere",
+				"origin": [-0.5,-2,-2.75],
+				"radius": 0.25,
+				"diffuse": 1.0,
+				"reflection": 0.9,
+				"shiny": 0.35,
+				"k": 10,
+				"color": [100, 100, 100]
+			},
+
+			{
+				"name": "sphere2",
+				"shape": "Sphere",
+				"origin": [-2, 0, -5],
+				"radius": 1.25,
+				"diffuse": 0.5,
+				"reflection": 0.6,
+				"shiny": 0.7,
+				"k": 10,
+				"color": [0, 200, 0]
+			},
+
+			{
+				"name": "sphere3",
+				"shape": "Sphere",
+				"origin": [2, 0, -4],
+				"radius": 0.75,
+				"diffuse": 0.75,
+				"reflection": 0.75,
+				"shiny": 0.8,
+				"k": 10,
+				"color": [0, 0, 200]
+			},
+
+			{
+				"name": "Ground",
+				"shape": "Plane",
+				"origin": [0,-3,0],
+				"normal": [0, 1, 0],
+				"diffuse": 0.25,
+				"reflection": 0.95,
+				"shiny": 0.75,
+				"k": 9,
+				"color1": [200, 0, 200],
+				"color2": [0,0,0]
+			}
+
+		],
+
+		"lights": [
+			{
+				"name": "Light1",
+				"origin": [0, 10, -3],
+				"radius": 0.1,
+				"brightness": 8.0,
+				"color": [255, 255, 255]
+			},
+
+			{
+				"name": "Light2",
+				"origin": [0, 0, 10],
+				"radius": 0.1,
+				"brightness": 5.0,
+				"color": [255, 255, 0]
+			},
+
+			{
+				"name": "Light3",
+				"origin": [-5, 5, 0],
+				"radius": 0.1,
+				"brightness": 5.0,
+				"color": [255, 0, 255]
+			},
+
+			{
+				"name": "Light4",
+				"origin": [5, 5, 0],
+				"radius": 0.1,
+				"brightness": 5.0,
+				"color": [0, 255, 255]
+			}
+
+
+		],
+
+		"camera": {
+			"origin": [0, 1, 2],
+			"target": [0, 0.5, -10],
+			"length": 1.0,
+			"aperture": 4.0
+		},
+
+		"ambient": [0, 0, 0]
+
+	}
+
+}
