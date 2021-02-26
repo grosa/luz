@@ -2,6 +2,7 @@
 
 A simple python3 raytracer using MPI that renders to ASCII, suitable as a cluster test tool.
 
+![sample render](textures.png)
 ![sample render](render.png)
 ![ascii render](luz_ascii.png)
 
@@ -19,10 +20,10 @@ A simple python3 raytracer using MPI that renders to ASCII, suitable as a cluste
   - reflections
   - Lambert shading
   - Phong-Blinn shading
-  - spheres
+  - spheres (texture mapped)
   - planes
-  - arbitrary camera positioning
-  - json scene file
+  - arbitrary camera positioning and orientation
+  - json scene files
 
 
 #### Usage:
@@ -57,9 +58,8 @@ optional arguments:
 #### Todo:
 
   - soft shadows (https://stackoverflow.com/questions/31709332/ray-tracing-soft-shadow)
-  - triangles (https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle)
   - oct-tree object storage
-  - texture mapping
+  - texture mapping all shapes
   - refraction (https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel, https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf)
   - other shapes (https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection)
   - skybox

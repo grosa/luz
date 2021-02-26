@@ -83,10 +83,16 @@ class Scene:
 
         for object in scene['scene']['objects']:
             if(object['shape'] == "Sphere"):
+
+                texture = None
+                if 'texture' in object:
+                    texture = object['texture']
+
                 self.objects.append(Sphere(origin = object['origin'], radius = object['radius'],
                                            diffuse = object['diffuse'], reflection = object['reflection'],
                                            shiny = object['shiny'], k = object['k'],
-                                           color = object['color']))
+                                           color = object['color'],
+                                           texture = texture ))
             elif(object['shape'] == "Plane"):
                 self.objects.append(Plane(origin = object['origin'], normal = object['normal'],
                                           diffuse = object['diffuse'], reflection = object['reflection'],
