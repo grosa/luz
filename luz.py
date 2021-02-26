@@ -10,203 +10,28 @@ import pandas as pd
 
 from mpi4py import MPI
 
+from ray import Ray
+from point import Point
+
+from object import Object
+from sphere import Sphere
+from plane import Plane
+from triangle import Triangle
+
 ASCII_CHARS = ["@", "#", "$", "%", "?", "*", "+", ";", ":", ",", "."]
 
-class Point:
+class Material:
+    def __init__(self, diffuse, reflection, shiny, k, color, texture):
+        pass
 
-    def __init__(self, coords):
-        self.coords = coords
-
-    def x(self):
-        return self.coords[0]
-
-    def y(self):
-        return self.coords[1]
-
-    def z(self):
-        return self.coords[2]
-
-    def normalize(self):
-      norm = np.linalg.norm(self.coords)
-      if norm != 0:
-          self.coords = self.coords / norm
-
-class Object:
-
-    def intersect(self, ray, scene, bounce, max_bounces):
-
-        origin, distance = self.geo_intersect(ray)
-        total_geo_intersections = 1
-
-        if(origin is None):
-            return(scene.ambient, None, None, 1)
-
-        normal = self.normal_at(origin)
-        color = np.full(3, 0.0)
-        reflected_color = np.full(3, 0.0)
-
-        for l in scene.lights:
-
-            lightray = Ray(l.origin, l.origin - origin)
-            light_distance = lightray.distance()
-            lightray.normalize()
-
-            shadowray = Ray(origin, l.origin - origin)
-            in_shadow, shadow_intersections = shadowray.in_shadow(self, scene)
-            total_geo_intersections = total_geo_intersections + shadow_intersections
-
-            if in_shadow == False:
-                color += (self.color_at(origin) * l.color * l.brightness * self.diffuse * max(np.dot(normal, lightray.direction), 0) / light_distance).clip(0, 255)
-
-                if(self.shiny > 0):
-                    cam_ray = Ray(origin, scene.camera.origin - origin)
-                    cam_ray.normalize()
-
-                    halfway = cam_ray.direction + lightray.direction
-                    color += (l.color * l.brightness * self.shiny * max(np.dot(normal, halfway), 0) ** self.k / light_distance).clip(0, 255)
-
-        if(bounce < max_bounces):
-            dot = -np.dot(normal, ray.direction)
-            raydir = ray.direction + (2 * dot * normal)
-            newray = Ray(origin, raydir)
-
-            closest = 999
-            for obj in scene.objects:
-                if obj != self:
-                    r_value, r_depth, r_distance, geo_intersections = obj.intersect(newray, scene, bounce + 1, max_bounces)
-                    total_geo_intersections += geo_intersections
-                    if(r_distance is not None and r_distance < closest):
-                        closest = r_distance
-                        reflected_color = r_value * self.reflection
-
-        return((color + reflected_color + scene.ambient).clip(0, 255), origin[2], distance, total_geo_intersections)
-
-class Ray:
-    def __init__(self, origin, direction):
-        self.origin = np.array(origin)
-        self.direction = np.array(direction)
-
-    def distance(self):
-        a = self.direction[0] * self.direction[0]
-        b = self.direction[1] * self.direction[1]
-        c = self.direction[2] * self.direction[2]
-
-        return(np.sqrt(a+b+c))
-
-    def normalize(self):
-      norm = np.linalg.norm(self.direction)
-      if norm != 0:
-          self.direction /= norm
-
-    def in_shadow(self, this, scene):
-        intersections = 0
-        for obj in scene.objects:
-            if obj is not this:
-                intersections = intersections + 1
-                if obj.collides_with(self):
-                    return(True, intersections)
-        return(False, intersections)
-
-class Sphere(Object):
-    def __init__(self, origin, radius = 1, diffuse = 0.5, reflection = 0.5, shiny = 0.5, k = 8, color = [255, 255, 255]):
-        self.origin = np.array(origin)
-        self.radius = radius
-        self.color = np.array(color)
-        self.diffuse = diffuse
-        self.reflection = reflection
-        self.shiny = shiny
-        self.k = k
-
-    def collides_with(self, ray):
-        origin, distance = self.geo_intersect(ray)
-        if(origin is None or distance is None):
-            return(False)
-        return(True)
-
-    # adapted from http://viclw17.github.io/2018/07/16/raytracing-ray-sphere-intersection/
-    def geo_intersect(self, ray):
-
-        oc = ray.origin - self.origin
-        a = np.dot(ray.direction, ray.direction)
-        b = 2.0 * np.dot(oc, ray.direction)
-        c = np.dot(oc, oc) - (self.radius * self.radius)
-        discriminant = (b * b) - (4 * a * c)
-
-        if(discriminant < 0.0):
-            return(None, None)
-        else:
-            numerator = -b - np.sqrt(discriminant)
-            if(numerator > 0.0):
-                distance = numerator / (2.0 * a)
-                origin = ray.origin + (ray.direction * distance)
-                return(origin, distance)
-
-            numerator = -b + np.sqrt(discriminant)
-            if(numerator > 0.0):
-                distance = numerator / (2.0 * a)
-                origin = ray.origin + (ray.direction * distance)
-                return(origin, distance)
-            else:
-                return(None, None)
-
-    def normal_at(self, origin):
-        dir = origin - self.origin
-        norm = np.linalg.norm(dir)
-        if(norm != 0):
-            dir /= norm
-        return(dir)
-
-    def color_at(self, origin):
-        return(self.color)
-
-class Plane(Object):
-    def __init__(self, origin, normal, diffuse, reflection, shiny = 0.5, k = 8, color1 = np.array([0,0,0]), color2 = np.array([255, 255, 255])):
-        self.origin = np.array(origin)
-        self.normal_v = np.array(normal)
-        self.diffuse = diffuse
-        self.reflection = reflection
-        self.shiny = shiny
-        self.k = k
-        self.color1 = np.array(color1)
-        self.color2 = np.array(color2)
-
-    def collides_with(self, ray):
-        origin, distance = self.geo_intersect(ray)
-        if(origin is None or distance is None):
-            return(False)
-        return(True)
-
-    def normal(self):
-        return(self.normal_v)
-
-    def normal_at(self, origin):
-        return(self.normal_v)
-
-    # simple checkerboard hack
-    def color_at(self, origin):
-        if((int(origin[0]) % 2 == 0) and (int(origin[2]) % 2 == 0)):
-            return(self.color1)
-        if((int(origin[0]) % 2 == 1) and (int(origin[2]) % 2 == 1)):
-            return(self.color1)
-        return(self.color2)
-
-    # ray-plane intersection
-    # adapted from https://stackoverflow.com/questions/23975555/how-to-do-ray-plane-intersection
-    def geo_intersect(self, ray):
-        denom = np.dot(self.normal(), ray.direction)
-
-        if(abs(denom) > 0.0001):
-            t = np.dot(self.origin - ray.origin, self.normal()) / denom
-            if(t > 0):
-                return(ray.origin + (ray.direction * t), t)
-
-        return(None, None)
-
+class Cube(Object):
+    def __init__(self):
+        pass
 
 class Light:
     """A light is a sphere that is a bounce terminator"""
     def __init__(self, origin, radius, brightness, color):
-        self.origin = origin
+        self.origin = np.array(origin)
         self.radius = radius
         self.brightness = brightness
         self.color = np.array(color) / 255.0
@@ -232,11 +57,11 @@ class Camera:
         self.aperture = aperture
         self.length = length
 
-        forward = Point(self.target - self.origin)
+        forward = Point(self.target - self.origin, None)
         forward.normalize()
 
-        right = Point(np.cross(forward.coords, np.array([0, 1, 0])))
-        up = Point(np.cross(right.coords, forward.coords))
+        right = Point(np.cross(forward.coords, np.array([0, 1, 0])), None)
+        up = Point(np.cross(right.coords, forward.coords), None)
 
         self.rotation_matrix = np.array([
             right.coords, up.coords, forward.coords
@@ -267,12 +92,20 @@ class Scene:
                                           diffuse = object['diffuse'], reflection = object['reflection'],
                                           shiny = object['shiny'], k = object['k'],
                                           color1 = object['color1'], color2 = object['color2']))
+            elif(object['shape'] == "Triangle"):
+                self.objects.append(Triangle(v0 = object['v0'], v1 = object['v1'], v2 = object['v2'],
+                                          diffuse = object['diffuse'], reflection = object['reflection'],
+                                          shiny = object['shiny'], k = object['k'],
+                                          color0 = object['color0'],
+                                          color1 = object['color1'],
+                                          color2 = object['color2'] ))
 
         camera = scene['scene']['camera']
         self.camera = Camera(origin = camera['origin'], target = camera['target'],
                              length = camera['length'], aperture = camera['aperture'])
 
         self.ambient = np.array(scene['scene']['ambient'])
+        self.background = np.array(scene['scene']['background'])
 
 
     def render(self, size, rank, img_height, img_width, max_bounces):
