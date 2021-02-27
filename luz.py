@@ -94,10 +94,21 @@ class Scene:
                                            color = object['color'],
                                            texture = texture ))
             elif(object['shape'] == "Plane"):
+
+                texture = None
+                scale = 1.0
+
+                if 'texture' in object:
+                    texture = object['texture']
+
+                if 'scale' in object:
+                    scale = object['scale']
+
                 self.objects.append(Plane(origin = object['origin'], normal = object['normal'],
                                           diffuse = object['diffuse'], reflection = object['reflection'],
                                           shiny = object['shiny'], k = object['k'],
-                                          color1 = object['color1'], color2 = object['color2']))
+                                          color = object['color'],
+                                          texture = texture, scale = scale))
             elif(object['shape'] == "Triangle"):
                 self.objects.append(Triangle(v0 = object['v0'], v1 = object['v1'], v2 = object['v2'],
                                           diffuse = object['diffuse'], reflection = object['reflection'],
@@ -231,7 +242,7 @@ def main(img_height = 200, img_width = 200, cols = 80, output_filename = 'output
 
       print_ascii(output, 80)
       print("\033[0mThere... are... %i... lights!" %(len(scene.lights)))
-      print("Finished in %f seconds." % (time.time() - start))
+      print("Finished in %f seconds. Output: %s." % (time.time() - start, output_filename))
 
       if(show_stats):
           print("Worker stats distribution.")
