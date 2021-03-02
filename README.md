@@ -3,6 +3,7 @@
 A simple python3 raytracer using MPI that renders to ASCII, suitable as a cluster test tool.
 
 ![sample render](textures.png)
+![sample render](dof.png)
 ![sample render](render.png)
 ![ascii render](luz_ascii.png)
 
