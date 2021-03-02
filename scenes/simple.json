@@ -1,0 +1,85 @@
+{
+	"scene": {
+
+		"objects": [
+
+			{
+				"name": "Planet",
+				"shape": "Sphere",
+				"origin": [0.0, 3.0, 0],
+				"radius": 3,
+				"diffuse": 1.0,
+				"reflection": 0.40,
+				"shiny": 0.0,
+				"k": 9,
+				"color": [0.0, 0.0, 0.0],
+				"texture": "textures/earth.png"
+			},
+
+			{
+				"name": "Moon",
+				"shape": "Sphere-false",
+				"origin": [6.0, 6.0, 3],
+				"radius": 0.75,
+				"diffuse": 1.0,
+				"reflection": 0.20,
+				"shiny": 0.2,
+				"k": 9,
+				"color": [0.0, 0.0, 0.0],
+				"texture": "textures/moon.jpg"
+			},
+
+
+			{
+				"name": "Ground",
+				"shape": "Plane",
+				"origin": [0.0, -2.5, 0.0],
+				"normal": [0, 1.0, 0],
+				"diffuse": 0.15,
+				"reflection": 0.55,
+				"shiny": 0.75,
+				"k": 12,
+				"color": [0.0, 0.0, 0.0],
+				"scale": 250.0,
+				"texture": "textures/marble.jpg"
+			},
+
+			{
+				"name": "Skybox",
+				"shape": "Skybox-false",
+				"origin": [0.0, 0.0, 0.0],
+				"radius": 50,
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"shiny": 0.0,
+				"k": 0,
+				"color": [0.0, 0.0, 0.0],
+				"texture": "textures/nightsky-5k.jpg"
+			}
+
+		],
+
+		"lights": [
+			{
+				"name": "light",
+				"origin": [-3, 20, 0],
+				"radius": 0.25,
+				"brightness": 25.0,
+				"color": [255.0, 255.0, 255.0]
+			}
+
+		],
+
+		"camera": {
+			"origin": [0, 3, 10],
+			"target": [0, 2, -10],
+			"length": 0.75,
+			"aperture": 0.01
+		},
+
+		"ambient": [0, 0, 0],
+		"background": [18.0, 26.0, 30.0]
+
+	}
+
+}

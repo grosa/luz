@@ -1,5 +1,5 @@
-from object import Object
-from point import Point
+from geometry.Object import Object
+from vectors.Point import Point
 
 import numpy as np
 import math
@@ -8,6 +8,7 @@ from PIL import Image
 
 class Sphere(Object):
     def __init__(self, origin, radius = 1, diffuse = 0.5, reflection = 0.5, shiny = 0.5, k = 8, color = [255, 255, 255], texture = None):
+
         self.origin = np.array(origin)
         self.radius = radius
         self.color = np.array(color)
@@ -46,14 +47,15 @@ class Sphere(Object):
             else:
                 return(None, None)
 
-    def normal_at(self, origin):
-        dir = origin - self.origin
+    def normal_at(self, point):
+        dir = point - self.origin
         norm = np.linalg.norm(dir)
         if(norm != 0):
             dir /= norm
         return(dir)
 
     # based on https://viclw17.github.io/2019/04/12/raytracing-uv-mapping-and-texturing/
+    # this might be faster https://gamedev.stackexchange.com/questions/114412/how-to-get-uv-coordinates-for-sphere-cylindrical-projection
     def get_uv(self, point):
         phi = np.arctan2(point.z(), point.x())
         # print(point.y())
@@ -74,3 +76,12 @@ class Sphere(Object):
         x = self.texture.width * u
         y = self.texture.height * v
         return(self.texture.getpixel((x,y))[:3])
+
+class Skybox(Sphere):
+
+    def normal_at(self, origin):
+        dir = self.origin - origin
+        norm = np.linalg.norm(dir)
+        if(norm != 0):
+            dir /= norm
+        return(dir)

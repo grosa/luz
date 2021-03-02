@@ -21,9 +21,12 @@ A simple python3 raytracer using MPI that renders to ASCII, suitable as a cluste
   - Lambert shading
   - Phong-Blinn shading
   - spheres (texture mapped)
-  - planes
+  - planes(texture mapped)
+  - triangles (color interpolated between vertices)
+  - spherical skyboxes
   - arbitrary camera positioning and orientation
   - json scene files
+  - depth of field (sloooooow)
 
 
 #### Usage:
@@ -59,9 +62,11 @@ optional arguments:
 
   - soft shadows (https://stackoverflow.com/questions/31709332/ray-tracing-soft-shadow)
   - oct-tree object storage
-  - texture mapping all shapes
+  - texture mapping triangles
+  - named materials
+  - animation path with points and interpolation in between
+  - triangle per vertex normals with interpolation
   - refraction (https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel, https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf)
   - other shapes (https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection)
-  - skybox
   - antialiasing
   - loading standard models

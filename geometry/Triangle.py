@@ -1,5 +1,5 @@
-from object import Object
-from point import Point
+from geometry.Object import Object
+from vectors.Point import Point
 
 import numpy as np
 
@@ -55,8 +55,9 @@ class Triangle(Object):
         # point_parametric = ray.origin + t * ray.direction
         point = Point( (u * self.v1) + (v * self.v2) + ((1 - u - v) * self.v0), (u,v,(1 - u - v)))
 
-        distance = np.sqrt(sum(point.coords * point.coords))
-        return(point, distance)
+        #distance = np.sqrt(sum(point.coords * point.coords))
+        #return(point, distance)
+        return(point, t)
         # return(point_parametric, t)
 
     def normal_at(self, point):

@@ -1,0 +1,84 @@
+{
+	"scene": {
+
+		"objects": [
+
+			{
+				"name": "earth",
+				"shape": "Sphere",
+				"origin": [0.0, 0, -3.5],
+				"radius": 1.0,
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"shiny": 0.0,
+				"k": 9,
+				"color": [200.0, 0.0, 0.0],
+				"texture": "textures/earth.png"
+			},
+
+			{
+				"name": "moon",
+				"shape": "Sphere",
+				"origin": [-3.0, 1, -6],
+				"radius": 1,
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"shiny": 0.0,
+				"k": 10,
+				"color": [100.0, 100.0, 100.0],
+				"texture": "textures/moon.jpg"
+			},
+
+			{
+				"name": "nebula",
+				"shape": "Sphere",
+				"origin": [2, 1, -2],
+				"radius": 1,
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"shiny": 0.0,
+				"k": 8,
+				"color": [0, 200, 0],
+				"texture": "textures/nebula.jpg"
+			},
+
+			{
+				"name": "Ground",
+				"shape": "Plane",
+				"origin": [0,-1,0],
+				"normal": [0, 1, 0],
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"shiny": 0.0,
+				"k": 9,
+				"color": [200.0, 200.0, 200.0],
+				"scale": 250,
+				"texture": "textures/marble.jpg"
+			}
+
+		],
+
+		"lights": [
+			{
+				"name": "Light1",
+				"origin": [0, 10, 0],
+				"radius": 0.1,
+				"brightness": 10.0,
+				"color": [255.0, 255.0, 255.0]
+			}
+
+		],
+
+		"camera": {
+			"origin": [-1, 1, 0],
+			"target": [0, 0, -3.5],
+			"length": 0.75,
+			"aperture": 0.25
+		},
+
+		"ambient": [0, 0, 0],
+		"background": [0.0, 0.0, 0.0]
+
+	}
+
+}

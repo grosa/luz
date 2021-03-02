@@ -1,5 +1,5 @@
 import numpy as np
-from ray import Ray
+from vectors.Ray import Ray
 
 class Object:
 
@@ -31,18 +31,25 @@ class Object:
             shadowray = Ray(origin.coords, l.origin - origin.coords)
             shadowray.normalize()
 
-            in_shadow, shadow_intersections = shadowray.in_shadow(self, l, scene)
+            in_shadow = False
+            shadow_intersections = 0
+
+            if type(self).__name__ != "Skybox":
+                in_shadow, shadow_intersections = shadowray.in_shadow(self, l, scene)
+
             total_geo_intersections = total_geo_intersections + shadow_intersections
 
             if in_shadow == False:
-                color += (self.color_at(origin) * l.color * l.brightness * self.diffuse * max(np.dot(normal, lightray.direction), 0) / light_distance).clip(0, 255)
+                # color += (self.color_at(origin) * l.color * l.brightness * self.diffuse * max(np.dot(normal, lightray.direction), 0) / light_distance).clip(0, 255)
+                color += (self.color_at(origin) * l.color * l.brightness * self.diffuse * max(np.dot(normal, lightray.direction), 0) / light_distance)
 
                 if(self.shiny > 0.0):
                     cam_ray = Ray(origin.coords, scene.camera.origin - origin.coords)
                     cam_ray.normalize()
 
                     halfway = cam_ray.direction + lightray.direction
-                    color += (l.color * l.brightness * self.shiny * max(np.dot(normal, halfway), 0) ** self.k / light_distance).clip(0, 255)
+                    # color += (l.color * l.brightness * self.shiny * max(np.dot(normal, halfway), 0) ** self.k / light_distance).clip(0, 255)
+                    color += (l.color * l.brightness * self.shiny * max(np.dot(normal, halfway), 0) ** self.k / light_distance)
 
         if(self.reflection > 0.0 and bounce < max_bounces):
             dot = -np.dot(normal, ray.direction)
@@ -58,4 +65,5 @@ class Object:
                         closest = r_distance
                         reflected_color = r_value * self.reflection
 
-        return((color + reflected_color + scene.ambient).clip(0, 255), origin.z(), distance, total_geo_intersections)
+        # return((color + reflected_color + scene.ambient).clip(0, 255), origin.z(), distance, total_geo_intersections)
+        return((color + reflected_color + scene.ambient), origin.z(), distance, total_geo_intersections)

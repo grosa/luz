@@ -1,6 +1,6 @@
 from PIL import Image
-from object import Object
-from point import Point
+from geometry.Object import Object
+from vectors.Point import Point
 
 import numpy as np
 

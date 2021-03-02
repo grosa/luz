@@ -1,0 +1,86 @@
+{
+	"scene": {
+
+		"objects": [
+
+			{
+				"name": "Planet",
+				"shape": "Sphere",
+				"origin": [0.0, 3.0, 0],
+				"radius": 3.0,
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"shiny": 0.0,
+				"k": 9,
+				"color": [0.0, 0.0, 0.0],
+				"texture": "textures/earth.png"
+			},
+
+			{
+				"name": "Sky",
+				"shape": "Plane",
+				"origin": [0,6,0],
+				"normal": [0, -1, 0],
+				"diffuse": 0.5,
+				"reflection": 0.5,
+				"shiny": 0.0,
+				"k": 9,
+				"color1": [255.0, 255.0, 255.0],
+				"color2": [0.0, 0.0, 0.0]
+			},
+
+
+			{
+				"name": "Ground",
+				"shape": "Plane",
+				"origin": [0,0,0],
+				"normal": [0, 1, 0],
+				"diffuse": 0.5,
+				"reflection": 0.5,
+				"shiny": 0.0,
+				"k": 9,
+				"color1": [0.0, 0.0, 0.0],
+				"color2": [255.0,255.0,255.0]
+			}
+
+		],
+
+		"lights": [
+			{
+				"name": "Light1",
+				"origin": [-5, 3, 0],
+				"radius": 0.1,
+				"brightness": 10.0,
+				"color": [255.0, 0.0, 0.0]
+			},
+			{
+				"name": "Light2",
+				"origin": [5, 3, 0],
+				"radius": 0.1,
+				"brightness": 10.0,
+				"color": [0.0, 255.0, 0.0]
+			},
+			{
+				"name": "Light3",
+				"origin": [0, 3, 10],
+				"radius": 0.1,
+				"brightness": 10.0,
+				"color": [0.0, 0.0, 255.0]
+			}
+
+
+		],
+
+		"camera": {
+			"origin": [0, 3, 10],
+			"target": [0, 3, -10],
+			"length": 1.0,
+			"aperture": 4.0
+		},
+
+		"ambient": [0, 0, 0],
+		"background": [18.0, 26.0, 30.0]
+
+	}
+
+}
