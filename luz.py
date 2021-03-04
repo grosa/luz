@@ -53,16 +53,16 @@ class Light(Sphere):
         origin, distance = self.geo_intersect(ray)
 
         if(origin is None):
-            return(scene.background, None, None, 1)
+            return(scene.background, None, 1)
 
-        return(self.color * 255.0, origin.z(), distance, 1)
+        return(self.color * 255.0, distance, 1)
 
 
 # based on https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function/framing-lookat-function
 # and https://www.youtube.com/watch?v=LRN_ewuN_k4
 class Camera:
 
-    def __init__(self, origin, target, aperture = 4.0, length = 1.0, samples = 250):
+    def __init__(self, origin, target, aperture = 0.1, length = 1.0, samples = 50):
         self.origin = np.array(origin)
         self.target = np.array(target)
         self.aperture = aperture
@@ -82,6 +82,14 @@ class Camera:
         # distance to focal point
         focus_dir = self.target - self.origin
         self.focus = np.sqrt(sum( focus_dir * focus_dir ))
+
+        # camera circular bokeh
+        # float angle = RandomFloat01(state) * 2.0f * c_pi;
+        # float radius = sqrt(RandomFloat01(state));
+        # float2 offset = float2(cos(angle), sin(angle)) * radius * ApertureRadius;
+
+        if(self.aperture == 0.0):
+            self.samples = 1
 
 class Scene:
     def __init__(self, filename = "scene.json"):
@@ -116,14 +124,14 @@ class Scene:
                                            diffuse = object['diffuse'], reflection = object['reflection'],
                                            shiny = object['shiny'], k = object['k'],
                                            color = object['color'],
-                                           texture = texture ))
+                                           texture = texture, uv = object['uv'] ))
             elif(object['shape'] == "Skybox"):
 
                 self.objects.append(Skybox(origin = object['origin'], radius = object['radius'],
                                            diffuse = object['diffuse'], reflection = object['reflection'],
                                            shiny = object['shiny'], k = object['k'],
                                            color = object['color'],
-                                           texture = texture ))
+                                           texture = texture, uv = object['uv'] ))
 
             elif(object['shape'] == "Plane"):
 
@@ -142,7 +150,8 @@ class Scene:
 
         camera = scene['scene']['camera']
         self.camera = Camera(origin = camera['origin'], target = camera['target'],
-                             length = camera['length'], aperture = camera['aperture'])
+                             length = camera['length'], aperture = camera['aperture'],
+                             samples = camera['samples'])
 
         self.ambient = np.array(scene['scene']['ambient'])
         self.background = np.array(scene['scene']['background'])
@@ -151,7 +160,6 @@ class Scene:
     def render(self, size, rank, img_height, img_width, max_bounces):
 
       worker_pixels = np.zeros((img_height, img_width, 3))
-      # zbuffer = np.full((img_height, img_width), None)
       total_rays = 1
 
       # displacement from the top left corner to the middle of the pixel
@@ -178,21 +186,27 @@ class Scene:
                   focal_point = self.camera.origin + (ray.direction * self.camera.focus)
                   image_plane = self.camera.origin + (ray.direction * self.camera.length)
 
-                  ray.normalize()
+                  # might be able to cache these offsets in the camera class to
+                  # avoid recomputing for every primary ray
+                  # todo: circular vs square bokeh
+                  if(self.camera.samples > 1):
+                      sample_origin = [image_plane + np.matmul(self.camera.rotation_matrix, np.append( (np.random.rand(2) - 0.5) * self.camera.aperture, 0)) for sample in range(0, self.camera.samples)]
+                  else:
+                      sample_origin = [self.camera.origin, self.camera.origin]
 
-                  sample_origin = [image_plane + np.append( (np.random.rand(2) - 0.5) * self.camera.aperture, 0) for sample in range(0, self.camera.samples)]
+                  # ray.normalize()
 
                   for sample in range(0, self.camera.samples):
 
                       # calculate a new origin with random offset
                       sample_ray = Ray(sample_origin[sample], focal_point - sample_origin[sample])
-                      sample_ray.normalize()
+                      # sample_ray.normalize()
 
                       zbuffer = None
 
                       for o in self.objects:
                           # pixel, depth, distance, geo_intersections = o.intersect(ray, self, 0, max_bounces)
-                          pixel, depth, distance, geo_intersections = o.intersect(sample_ray, self, 0, max_bounces)
+                          pixel, distance, geo_intersections = o.intersect(sample_ray, self, 0, max_bounces)
                           stats['geo_intersections'] = stats['geo_intersections'] + geo_intersections
                           # if(zbuffer[y][x] is None or (distance is not None and distance < zbuffer[y][x])):
                           if(zbuffer is None or (distance is not None and distance < zbuffer)):
@@ -243,7 +257,7 @@ def print_ascii(input, term_width = 80):
 
 def main(img_height = 200, img_width = 200, cols = 80, output_filename = 'output.png',
          max_bounces = 3, show_stats = False, long_stats = False, sd = 2.0, input_filename = 'scenes/scene.json',
-         camera = None, target = None, focal = None, aperture = None, profile = False):
+         camera = None, target = None, focal = None, aperture = None, samples = None, profile = False):
 
   if(profile):
       import cProfile, pstats
@@ -261,11 +275,16 @@ def main(img_height = 200, img_width = 200, cols = 80, output_filename = 'output
       scene.camera = Camera(origin = np.array(camera, dtype=np.float32),
                        target = np.array(target, dtype=np.float32))
 
+  if(samples is not None):
+      scene.camera.samples = samples
+
   if(focal is not None):
       scene.camera.length = focal
 
   if(aperture is not None):
       scene.camera.aperture = aperture
+      if aperture == 0.0:
+          scene.camera.samples = 1
 
   if(rank != 0):
       pixels, stats = scene.render(size, rank, img_height, img_width, max_bounces)
@@ -274,6 +293,8 @@ def main(img_height = 200, img_width = 200, cols = 80, output_filename = 'output
 
   if(rank == 0):
 
+      print("Camera focus distance: %f. Aperture: %f. Samples %i." % (scene.camera.focus, scene.camera.aperture, scene.camera.samples))
+      print("Camera location: ", scene.camera.origin, " Target: ", scene.camera.target)
       start = time.time()
       pixels = np.zeros((img_height, img_width, 3))
       stats = []
@@ -306,8 +327,7 @@ def main(img_height = 200, img_width = 200, cols = 80, output_filename = 'output
 
       print_ascii(output, 80)
       print("\033[0mThere... are... %i... lights!" %(len(scene.lights)))
-      print("Camera focus distance: %f. Aperture: %f." % (scene.camera.focus, scene.camera.aperture))
-      print("Finished in %f seconds. Output: %s." % (time.time() - start, output_filename))
+      print("Finished in %f seconds. Output: %s" % (time.time() - start, output_filename))
 
       if(show_stats):
           print("Worker stats distribution.")
@@ -376,6 +396,7 @@ if __name__ == "__main__":
     parser.add_argument('--target', nargs="+", default=None, help = "camera target")
     parser.add_argument('--focal', type = float , default = None, help='camera focal length')
     parser.add_argument('--aperture', type = float , default = None, help='camera aperture')
+    parser.add_argument('--samples', type = int , default = None, help='dof samples')
 
     parser.add_argument('--profile', action='store_true', help='runs profiler')
 
@@ -383,4 +404,4 @@ if __name__ == "__main__":
 
     main(args.height, args.width, args.cols, args.output, args.bounces,
          args.stats, args.long, args.sd, args.scene, args.camera, args.target,
-         args.focal, args.aperture, args.profile)
+         args.focal, args.aperture, args.samples, args.profile)

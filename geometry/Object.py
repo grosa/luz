@@ -16,7 +16,7 @@ class Object:
         total_geo_intersections = 1
 
         if(origin is None):
-            return(scene.background, None, None, 1)
+            return(scene.background, None, 1)
 
         normal = self.normal_at(origin.coords)
         color = np.full(3, 0.0)
@@ -59,11 +59,11 @@ class Object:
             closest = 999
             for obj in scene.objects:
                 if obj != self:
-                    r_value, r_depth, r_distance, geo_intersections = obj.intersect(newray, scene, bounce + 1, max_bounces)
+                    r_value, r_distance, geo_intersections = obj.intersect(newray, scene, bounce + 1, max_bounces)
                     total_geo_intersections += geo_intersections
                     if(r_distance is not None and r_distance < closest):
                         closest = r_distance
                         reflected_color = r_value * self.reflection
 
         # return((color + reflected_color + scene.ambient).clip(0, 255), origin.z(), distance, total_geo_intersections)
-        return((color + reflected_color + scene.ambient), origin.z(), distance, total_geo_intersections)
+        return((color + reflected_color + scene.ambient), distance, total_geo_intersections)

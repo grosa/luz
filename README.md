@@ -2,10 +2,9 @@
 
 A simple python3 raytracer using MPI that renders to ASCII, suitable as a cluster test tool.
 
-![sample render](textures.png)
-![sample render](dof.png)
-![sample render](render.png)
-![ascii render](luz_ascii.png)
+![aperture size 0.15, 120 samples per pixel](gallery/dof_s120.png)
+![sample render](gallery/dof.png)
+![ascii render](gallery/ascii_render.png)
 
 #### Requires:
   - PIL
@@ -36,7 +35,7 @@ A simple python3 raytracer using MPI that renders to ASCII, suitable as a cluste
 
 ````
 usage: luz.py [-h] [--bounces BOUNCES] [--height HEIGHT] [--width WIDTH] [--cols COLS] [--sd SD] [--output OUTPUT] [--scene SCENE] [--stats] [--long] [--camera CAMERA [CAMERA ...]]
-              [--target TARGET [TARGET ...]] [--focal FOCAL] [--aperture APERTURE]
+              [--target TARGET [TARGET ...]] [--focal FOCAL] [--aperture APERTURE] [--samples SAMPLES] [--profile]
 
 A simple MPI raytracer.
 
@@ -57,6 +56,8 @@ optional arguments:
                         camera target
   --focal FOCAL         camera focal length
   --aperture APERTURE   camera aperture
+  --samples SAMPLES     dof samples
+  --profile             runs profiler
 ````
 
 #### Todo:
@@ -71,3 +72,5 @@ optional arguments:
   - other shapes (https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection)
   - antialiasing
   - loading standard models
+  - bokeh shapes (circular, hex)
+  - global illumination (pathtracing? photon mapping?)

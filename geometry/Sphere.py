@@ -7,7 +7,7 @@ import math
 from PIL import Image
 
 class Sphere(Object):
-    def __init__(self, origin, radius = 1, diffuse = 0.5, reflection = 0.5, shiny = 0.5, k = 8, color = [255, 255, 255], texture = None):
+    def __init__(self, origin, radius = 1, diffuse = 0.5, reflection = 0.5, shiny = 0.5, k = 8, color = [255, 255, 255], texture = None, uv = (0, 0)):
 
         self.origin = np.array(origin)
         self.radius = radius
@@ -17,6 +17,7 @@ class Sphere(Object):
         self.shiny = shiny
         self.k = k
         self.texture = None
+        self.uv = uv
 
         if(texture is not None):
             self.texture = Image.open(texture)
@@ -58,12 +59,16 @@ class Sphere(Object):
     # this might be faster https://gamedev.stackexchange.com/questions/114412/how-to-get-uv-coordinates-for-sphere-cylindrical-projection
     def get_uv(self, point):
         phi = np.arctan2(point.z(), point.x())
-        # print(point.y())
         theta = math.asin(point.y())
 
-        u = 1 - (phi + np.pi) / (2 * np.pi);
+        u = (phi + np.pi) / (2 * np.pi);
         v = (theta + np.pi / 2) / np.pi;
-        return(u, v)
+        return(self.uv[0] - u, v - self.uv[1])
+
+        # faster?
+        # u = np.arctan2(point.x(), point.z()) / (2 * np.pi) + 0.5;
+        # v = point.y() * 0.5 + 0.5;
+        # return(1.0 - u, v - 1.0)
 
     def color_at(self, point):
         if(self.texture is None):
