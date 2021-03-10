@@ -4,82 +4,147 @@
 		"objects": [
 
 			{
-				"name": "Planet",
+				"name": "ball1",
 				"shape": "Sphere",
-				"origin": [0.0, 3.0, 0],
-				"radius": 3.0,
-				"diffuse": 1.0,
-				"reflection": 0.0,
-				"shiny": 0.0,
-				"k": 9,
-				"color": [0.0, 0.0, 0.0],
-				"texture": "textures/earth.png"
-			},
-
-			{
-				"name": "Sky",
-				"shape": "Plane",
-				"origin": [0,6,0],
-				"normal": [0, -1, 0],
+				"origin": [-2.0, 1.0, 0],
+				"radius": 1.0,
 				"diffuse": 0.5,
 				"reflection": 0.5,
 				"shiny": 0.0,
 				"k": 9,
-				"color1": [255.0, 255.0, 255.0],
-				"color2": [0.0, 0.0, 0.0]
+				"refraction": 0.5,
+				"index": 2.5,
+				"color": [100.0, 100.0, 100.0],
+				"texture-false": "textures/earth.png",
+				"uv": [0, 0]
 			},
 
+			{
+				"name": "ball2",
+				"shape": "Sphere",
+				"origin": [1.0, 1.0, 1.1],
+				"radius": 1.0,
+				"diffuse": 0.25,
+				"reflection": 0.0,
+				"shiny": 0.0,
+				"k": 9,
+				"refraction": 0.75,
+				"index": 1.5,
+				"color": [100.0, 0.0, 0.0],
+				"texture-false": "textures/earth.png",
+				"uv": [0, 0]
+			},
 
 			{
 				"name": "Ground",
 				"shape": "Plane",
 				"origin": [0,0,0],
 				"normal": [0, 1, 0],
-				"diffuse": 0.5,
-				"reflection": 0.5,
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"refraction": 0.0,
+				"index": 1.0,
 				"shiny": 0.0,
 				"k": 9,
-				"color1": [0.0, 0.0, 0.0],
-				"color2": [255.0,255.0,255.0]
+				"color": [100.0,100.0,100.0],
+				"texture-false": "textures/marble.jpg",
+				"scale": 250
+			},
+			{
+				"name": "ceiling",
+				"shape": "Plane",
+				"origin": [0, 7, 0],
+				"normal": [0, -1, 0],
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"refraction": 0.0,
+				"index": 1.0,
+				"shiny": 0.0,
+				"k": 9,
+				"color": [100.0,100.0,100.0]
+			},
+			{
+				"name": "left",
+				"shape": "Plane",
+				"origin": [-6, 0, 0],
+				"normal": [1, 0, 0],
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"refraction": 0.0,
+				"index": 1.0,
+				"shiny": 0.0,
+				"k": 9,
+				"color": [100.0, 0.0, 0.0]
+			},
+			{
+				"name": "right",
+				"shape": "Plane",
+				"origin": [6, 0, 0],
+				"normal": [-1, 0, 0],
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"refraction": 0.0,
+				"index": 1.0,
+				"shiny": 0.0,
+				"k": 9,
+				"color": [0.0,100.0,0.0]
+			},
+			{
+					"name": "back",
+					"shape": "Plane",
+					"origin": [0, 0, -6],
+					"normal": [0, 0, 1],
+					"diffuse": 1.0,
+					"reflection": 0.0,
+					"refraction": 0.0,
+					"index": 1.0,
+					"shiny": 0.0,
+					"k": 9,
+					"color": [100.0, 100.0, 100.0],
+					"texture-false": "textures/marble.jpg",
+					"scale": 250
+				},
+		{
+				"name": "front",
+				"shape": "Plane",
+				"origin": [0, 0, 6],
+				"normal": [0, 0, -1],
+				"diffuse": 1.0,
+				"reflection": 0.0,
+				"refraction": 0.0,
+				"index": 1.0,
+				"shiny": 0.0,
+				"k": 9,
+				"color": [100.0,100.0,100.0],
+				"scale": 50,
+				"texture": "textures/nebula.jpg"
 			}
+
 
 		],
 
 		"lights": [
 			{
 				"name": "Light1",
-				"origin": [-5, 3, 0],
+				"origin": [0, 3, 0],
 				"radius": 0.1,
-				"brightness": 10.0,
-				"color": [255.0, 0.0, 0.0]
-			},
-			{
-				"name": "Light2",
-				"origin": [5, 3, 0],
-				"radius": 0.1,
-				"brightness": 10.0,
-				"color": [0.0, 255.0, 0.0]
-			},
-			{
-				"name": "Light3",
-				"origin": [0, 3, 10],
-				"radius": 0.1,
-				"brightness": 10.0,
-				"color": [0.0, 0.0, 255.0]
+				"brightness": 3.0,
+				"color": [255.0, 255.0, 255.0]
 			}
-
 
 		],
 
 		"camera": {
-			"origin": [0, 3, 10],
-			"target": [0, 3, -10],
-			"length": 1.0,
-			"aperture": 4.0
+			"origin": [0, 2, 4],
+			"target": [0, 1, 0],
+			"length": 0.750,
+			"aperture": 0.0,
+			"samples": 20
 		},
 
 		"ambient": [0, 0, 0],
-		"background": [18.0, 26.0, 30.0]
+		"background": [0, 0, 0],
+		"bounces": 5
 
 	}
 

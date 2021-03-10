@@ -45,8 +45,8 @@
 				"diffuse": 0.1,
 				"reflection": 0.25,
 				"refraction": 0.7,
-				"index": 1.5,
-				"shiny": 0.1,
+				"index": 1.75,
+				"shiny": 0.2,
 				"k": 12,
 				"color": [50, 50.0, 50.0],
 				"uv": [0,0]
@@ -89,18 +89,18 @@
 
 		"lights": [
 			{
-				"name": "white light",
+				"name": "gold light",
 				"origin": [-2, 8, 8],
 				"radius": 0.25,
-				"brightness": 10.0,
-				"color": [255.0, 255.0, 255.0]
+				"brightness": 6.0,
+				"color": [255.0, 215.0, 0.0]
 			},
 			{
 				"name": "dim side light",
 				"origin": [6, 8, 9],
 				"radius": 0.1,
 				"brightness": 5.0,
-				"color": [50.0, 50.0, 0.0]
+				"color": [80.0, 0.0, 80.0]
 			},
 			{
 				"name": "global camera light",
@@ -116,7 +116,7 @@
 		"camera": {
 			"origin": [0, 10, 30],
 			"target": [0, 3, 0],
-			"length": 1.25,
+			"length": 1.0,
 			"aperture": 0.0,
 			"samples": 10
 		},
