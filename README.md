@@ -2,8 +2,8 @@
 
 A simple python3 raytracer using MPI that renders to ASCII, suitable as a cluster test tool.
 
+![refraction and dof](gallery/earth_f0.2_s120_1000x1000.png)
 ![aperture size 0.15, 120 samples per pixel](gallery/dof_s120.png)
-![sample render](gallery/dof.png)
 ![ascii render](gallery/ascii_render.png)
 
 #### Requires:
@@ -27,6 +27,7 @@ A simple python3 raytracer using MPI that renders to ASCII, suitable as a cluste
   - arbitrary camera positioning and orientation
   - json scene files
   - depth of field (sloooooow)
+  - refraction (does not play well with shadows)
 
 
 #### Usage:
@@ -68,7 +69,6 @@ optional arguments:
   - named materials
   - animation path with points and interpolation in between
   - triangle per vertex normals with interpolation
-  - refraction (https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel, https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf, https://blog.demofox.org/2017/01/09/raytracing-reflection-refraction-fresnel-total-internal-reflection-and-beers-law/)
   - other shapes (https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection)
   - antialiasing
   - loading standard models
