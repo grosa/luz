@@ -3,6 +3,7 @@ import PIL.Image
 import random
 import time
 import json
+import socket
 
 import numpy as np
 import pandas as pd
@@ -73,7 +74,9 @@ class Camera:
         forward.normalize()
 
         right = Point(np.cross(forward.coords, np.array([0, 1, 0])), None)
+        right.normalize()
         up = Point(np.cross(right.coords, forward.coords), None)
+        up.normalize()
 
         self.rotation_matrix = np.array([
             right.coords, up.coords, forward.coords
@@ -123,6 +126,7 @@ class Scene:
                 self.objects.append(Sphere(origin = object['origin'], radius = object['radius'],
                                            diffuse = object['diffuse'], reflection = object['reflection'],
                                            shiny = object['shiny'], k = object['k'],
+                                           refraction = object['refraction'], index = object['index'],
                                            color = object['color'],
                                            texture = texture, uv = object['uv'] ))
             elif(object['shape'] == "Skybox"):
@@ -130,6 +134,7 @@ class Scene:
                 self.objects.append(Skybox(origin = object['origin'], radius = object['radius'],
                                            diffuse = object['diffuse'], reflection = object['reflection'],
                                            shiny = object['shiny'], k = object['k'],
+                                           refraction = object['refraction'], index = object['index'],
                                            color = object['color'],
                                            texture = texture, uv = object['uv'] ))
 
@@ -137,12 +142,14 @@ class Scene:
 
                 self.objects.append(Plane.Plane(origin = object['origin'], normal = object['normal'],
                                           diffuse = object['diffuse'], reflection = object['reflection'],
+                                          refraction = object['refraction'], index = object['index'],
                                           shiny = object['shiny'], k = object['k'],
                                           color = object['color'],
                                           texture = texture, scale = scale))
             elif(object['shape'] == "Triangle"):
                 self.objects.append(Triangle.Triangle(v0 = object['v0'], v1 = object['v1'], v2 = object['v2'],
                                           diffuse = object['diffuse'], reflection = object['reflection'],
+                                          refraction = object['refraction'], index = object['index'],
                                           shiny = object['shiny'], k = object['k'],
                                           color0 = object['color0'],
                                           color1 = object['color1'],
@@ -166,7 +173,7 @@ class Scene:
       PIXEL_WIDTH = (2.0 / (img_width + 1))
       PIXEL_HEIGHT = (2.0 / (img_height + 1))
 
-      stats = {'rank': rank, 'pixels': 0, 'geo_intersections': 0, 'time': time.time()}
+      stats = {'rank': rank, 'hostname': socket.gethostname(), 'pixels': 0, 'geo_intersections': 0, 'time': time.time()}
 
       for y in range(0, img_height):
           for x in range(0, img_width):
@@ -257,7 +264,7 @@ def print_ascii(input, term_width = 80):
 
 def main(img_height = 200, img_width = 200, cols = 80, output_filename = 'output.png',
          max_bounces = 3, show_stats = False, long_stats = False, sd = 2.0, input_filename = 'scenes/scene.json',
-         camera = None, target = None, focal = None, aperture = None, samples = None, profile = False):
+         camera = None, target = None, focal = None, aperture = None, samples = None, profile = False, quiet = False):
 
   if(profile):
       import cProfile, pstats
@@ -325,8 +332,9 @@ def main(img_height = 200, img_width = 200, cols = 80, output_filename = 'output
       output = PIL.Image.fromarray(pixels.clip(0,255).astype('uint8'), 'RGB')
       output.save(output_filename)
 
-      print_ascii(output, 80)
-      print("\033[0mThere... are... %i... lights!" %(len(scene.lights)))
+      if(not quiet):
+          print_ascii(output, 80)
+          print("\033[0mThere... are... %i... lights!" %(len(scene.lights)))
       print("Finished in %f seconds. Output: %s" % (time.time() - start, output_filename))
 
       if(show_stats):
@@ -366,8 +374,9 @@ def main(img_height = 200, img_width = 200, cols = 80, output_filename = 'output
           if(long_stats):
               print("Worker details:")
               for worker in stats:
-                  print(" - Worker %i, time: %f, pixels %i, intersections: %i." %(
+                  print(" - Worker %i (%s), time: %f, pixels %i, intersections: %i." %(
                       worker['rank'],
+                      worker['hostname'],
                       worker['time'],
                       worker['pixels'],
                       worker['geo_intersections']
@@ -399,9 +408,10 @@ if __name__ == "__main__":
     parser.add_argument('--samples', type = int , default = None, help='dof samples')
 
     parser.add_argument('--profile', action='store_true', help='runs profiler')
+    parser.add_argument('--quiet', action='store_true', help='no ascii output')
 
     args = parser.parse_args()
 
     main(args.height, args.width, args.cols, args.output, args.bounces,
          args.stats, args.long, args.sd, args.scene, args.camera, args.target,
-         args.focal, args.aperture, args.samples, args.profile)
+         args.focal, args.aperture, args.samples, args.profile, args.quiet)

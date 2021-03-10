@@ -5,6 +5,9 @@ class Ray:
         self.origin = np.array(origin)
         self.direction = np.array(direction)
 
+    def offset(self):
+        self.origin = self.origin + self.direction * 0.01
+
     def distance(self):
         a = self.direction[0] * self.direction[0]
         b = self.direction[1] * self.direction[1]

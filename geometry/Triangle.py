@@ -5,13 +5,18 @@ import numpy as np
 
 class Triangle(Object):
 
-    def __init__(self, v0, v1, v2, diffuse = 0.5, reflection = 0.5, shiny = 0.5, k = 8,
-                 color0 = [255, 255, 255], color1 = [255, 255, 255], color2 = [255, 255, 255]):
+    def __init__(self, v0, v1, v2, diffuse = 0.5, reflection = 0.5, refraction = 0.0,
+                 index = 1.0, shiny = 0.5, k = 8,
+                 color0 = [255, 255, 255],
+                 color1 = [255, 255, 255],
+                 color2 = [255, 255, 255]):
         self.v0 = np.array(v0)
         self.v1 = np.array(v1)
         self.v2 = np.array(v2)
         self.diffuse = diffuse
         self.reflection = reflection
+        self.refraction = refraction
+        self.index = index
         self.shiny = shiny
         self.k = k
         self.color0 = np.array(color0)

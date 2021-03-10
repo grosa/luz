@@ -5,12 +5,14 @@ from vectors.Point import Point
 import numpy as np
 
 class Plane(Object):
-    def __init__(self, origin, normal, diffuse, reflection, shiny = 0.5, k = 8,
-                 color = np.array([0,0,0]), texture = None, scale = 1.0):
+    def __init__(self, origin, normal, diffuse, reflection, refraction, index = 1.0,
+                 shiny = 0.5, k = 8, color = np.array([0,0,0]), texture = None, scale = 1.0):
         self.origin = np.array(origin)
         self.normal_v = np.array(normal)
         self.diffuse = diffuse
         self.reflection = reflection
+        self.refraction = refraction
+        self.index = index
         self.shiny = shiny
         self.k = k
         self.color = np.array(color)
@@ -54,7 +56,7 @@ class Plane(Object):
         x = int(abs(u) * self.scale) % self.texture.width
         y = int(abs(v) * self.scale) % self.texture.height
 
-        return(self.texture.getpixel((int(x),int(y)))[:3])
+        return(self.texture.getpixel((int(x),int(y)))[:3] + self.color * self.diffuse)
 
     # ray-plane intersection
     # adapted from https://stackoverflow.com/questions/23975555/how-to-do-ray-plane-intersection

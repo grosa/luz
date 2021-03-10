@@ -7,13 +7,16 @@ import math
 from PIL import Image
 
 class Sphere(Object):
-    def __init__(self, origin, radius = 1, diffuse = 0.5, reflection = 0.5, shiny = 0.5, k = 8, color = [255, 255, 255], texture = None, uv = (0, 0)):
+    def __init__(self, origin, radius = 1, diffuse = 0.5, reflection = 0.5, refraction = 0.0,
+                 index = 1.0, shiny = 0.5, k = 8, color = [255, 255, 255], texture = None, uv = (0, 0)):
 
         self.origin = np.array(origin)
         self.radius = radius
         self.color = np.array(color)
         self.diffuse = diffuse
         self.reflection = reflection
+        self.refraction = refraction
+        self.index = index
         self.shiny = shiny
         self.k = k
         self.texture = None
@@ -80,7 +83,7 @@ class Sphere(Object):
         u,v = self.get_uv(p)
         x = self.texture.width * u
         y = self.texture.height * v
-        return(self.texture.getpixel((x,y))[:3])
+        return(self.texture.getpixel((x,y))[:3] + (self.color * self.diffuse))
 
 class Skybox(Sphere):
 

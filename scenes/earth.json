@@ -6,10 +6,12 @@
 			{
 				"name": "Planet",
 				"shape": "Sphere",
-				"origin": [0.0, 3.0, 0],
+				"origin": [0.0, 2.0, 3],
 				"radius": 3,
 				"diffuse": 1.0,
-				"reflection": 0.40,
+				"reflection": 0.0,
+				"refraction": 0.0,
+				"index": 1.0,
 				"shiny": 0.0,
 				"k": 9,
 				"color": [0.0, 0.0, 0.0],
@@ -19,12 +21,14 @@
 			},
 
 			{
-				"name": "Moon1",
+				"name": "Moon",
 				"shape": "Sphere",
-				"origin": [3.0, 6.0, 5],
+				"origin": [5.0, 6.0, 13],
 				"radius": 1.0,
 				"diffuse": 1.0,
-				"reflection": 0.50,
+				"reflection": 0.0,
+				"refraction": 0.0,
+				"index": 1.0,
 				"shiny": 0.2,
 				"k": 9,
 				"color": [0.0, 0.0, 0.0],
@@ -34,45 +38,33 @@
 			},
 
 			{
-				"name": "Moon2",
+				"name": "Globe",
 				"shape": "Sphere",
-				"origin": [-3.0, 8.0, 5],
-				"radius": 1.0,
-				"diffuse": 1.0,
-				"reflection": 0.70,
-				"shiny": 0.3,
-				"k": 9,
-				"color": [0.0, 0.0, 0.0],
-				"texture": "textures/moon.jpg",
-				"uv": [0.6, 0]
-			},
-
-			{
-				"name": "Moon",
-				"shape": "Sphere",
-				"origin": [3.0, 5.0, -5],
-				"radius": 1.0,
-				"diffuse": 1.0,
-				"reflection": 0.50,
-				"shiny": 0.3,
-				"k": 9,
-				"color": [0.0, 0.0, 0.0],
-				"texture": "textures/moon.jpg",
-				"uv": [0, 0.5]
-
+				"origin": [0.0, -3.5, 0.0],
+				"radius": 18,
+				"diffuse": 0.1,
+				"reflection": 0.25,
+				"refraction": 0.7,
+				"index": 1.5,
+				"shiny": 0.1,
+				"k": 12,
+				"color": [50, 50.0, 50.0],
+				"uv": [0,0]
 			},
 
 			{
 				"name": "Ground",
 				"shape": "Plane",
-				"origin": [0.0, -2.5, 0.0],
+				"origin": [0.0, -3.5, 1.0],
 				"normal": [0, 1.0, 0],
-				"diffuse": 0.15,
-				"reflection": 0.75,
-				"shiny": 0.75,
-				"k": 12,
+				"diffuse": 0.8,
+				"reflection": 0.5,
+				"refraction": 0.0,
+				"index": 1.0,
+				"shiny": 0.15,
+				"k": 7,
 				"color": [0.0, 0.0, 0.0],
-				"scale": 250.0,
+				"scale": 200.0,
 				"texture": "textures/marble.jpg"
 			},
 
@@ -83,11 +75,13 @@
 				"radius": 50,
 				"diffuse": 1.0,
 				"reflection": 0.0,
+				"refraction": 0.0,
+				"index": 1.0,
 				"shiny": 0.0,
 				"k": 0,
 				"color": [0.0, 0.0, 0.0],
 				"texture": "textures/nightsky-5k.jpg",
-				"uv": [0.25, 0]
+				"uv": [0.0, 0.0]
 
 			}
 
@@ -95,42 +89,36 @@
 
 		"lights": [
 			{
-				"name": "teal light",
-				"origin": [-10, 20, 15],
-				"radius": 0.25,
-				"brightness": 12.0,
-				"color": [0.0, 255.0, 255.0]
-			},
-			{
 				"name": "white light",
-				"origin": [10, 20, 16],
+				"origin": [-2, 8, 8],
 				"radius": 0.25,
-				"brightness": 15.0,
+				"brightness": 10.0,
 				"color": [255.0, 255.0, 255.0]
 			},
 			{
-				"name": "magenta light",
-				"origin": [12, 20, -15],
-				"radius": 0.25,
-				"brightness": 12.0,
-				"color": [255.0, 0.0, 255.0]
+				"name": "dim side light",
+				"origin": [6, 8, 9],
+				"radius": 0.1,
+				"brightness": 5.0,
+				"color": [50.0, 50.0, 0.0]
 			},
 			{
-				"name": "dim bottom light",
-				"origin": [0, 2, -3],
-				"radius": 0.05,
-				"brightness": 7.0,
-				"color": [255.0, 255.0, 0.0]
+				"name": "global camera light",
+				"origin": [0, 1, 31],
+				"radius": 0.25,
+				"brightness": 15.0,
+				"color": [100,100,100]
 			}
+
 
 		],
 
 		"camera": {
-			"origin": [0, 6, 15],
+			"origin": [0, 10, 30],
 			"target": [0, 3, 0],
 			"length": 1.25,
-			"aperture": 0.15,
-			"samples": 50
+			"aperture": 0.0,
+			"samples": 10
 		},
 
 		"ambient": [0, 0, 0],

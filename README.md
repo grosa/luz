@@ -68,9 +68,11 @@ optional arguments:
   - named materials
   - animation path with points and interpolation in between
   - triangle per vertex normals with interpolation
-  - refraction (https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel, https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf)
+  - refraction (https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel, https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf, https://blog.demofox.org/2017/01/09/raytracing-reflection-refraction-fresnel-total-internal-reflection-and-beers-law/)
   - other shapes (https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection)
   - antialiasing
   - loading standard models
   - bokeh shapes (circular, hex)
   - global illumination (pathtracing? photon mapping?)
+  - depth adaptive sampling, where the z buffer determines how many samples are shot for that pixel after the initial +0,+0 primary ray is shot
+  - shadow calculations assume all objects are solid... :(
