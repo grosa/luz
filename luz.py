@@ -188,7 +188,8 @@ class Scene:
                   ray = Ray(self.camera.origin, plane)
 
                   # now we apply the camera rotation to the ray direction
-                  ray.direction = np.matmul(self.camera.rotation_matrix, ray.direction)
+                  #ray.direction = np.matmul(self.camera.rotation_matrix, ray.direction)
+                  ray.direction = np.matmul(ray.direction, self.camera.rotation_matrix)
 
                   focal_point = self.camera.origin + (ray.direction * self.camera.focus)
                   image_plane = self.camera.origin + (ray.direction * self.camera.length)
@@ -197,7 +198,7 @@ class Scene:
                   # avoid recomputing for every primary ray
                   # todo: circular vs square bokeh
                   if(self.camera.samples > 1):
-                      sample_origin = [image_plane + np.matmul(self.camera.rotation_matrix, np.append( (np.random.rand(2) - 0.5) * self.camera.aperture, 0)) for sample in range(0, self.camera.samples)]
+                      sample_origin = [image_plane + np.matmul(np.append( (np.random.rand(2) - 0.5) * self.camera.aperture, 0), self.camera.rotation_matrix) for sample in range(0, self.camera.samples)]
                   else:
                       sample_origin = [self.camera.origin, self.camera.origin]
 
